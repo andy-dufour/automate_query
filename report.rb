@@ -63,7 +63,7 @@ role = ARGV[4]
 nodes = get_nodes(role,automate_fqdn,ent,token,user)
 
 nodes.each do |node|
-  report = get_report(node['latest_report']['id'],'ec2-52-36-215-216.us-west-2.compute.amazonaws.com','solutions','DEwWhx6-BhLi42ySGZOnk9WCBr9B3nXtYaRmYMrHHPY','adufour')
+  report = get_report(node['latest_report']['id'],automate_fqdn,ent,token,user)
   if report['profiles']
     report['profiles'].each do |profile|
       if profile['controls']
