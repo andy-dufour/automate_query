@@ -64,10 +64,14 @@ nodes = get_nodes(role,automate_fqdn,ent,token,user)
 
 nodes.each do |node|
   report = get_report(node['latest_report']['id'],'ec2-52-36-215-216.us-west-2.compute.amazonaws.com','solutions','DEwWhx6-BhLi42ySGZOnk9WCBr9B3nXtYaRmYMrHHPY','adufour')
-  report['profiles'].each do |profile|
-    profile['controls'].each do |control|
-      if num_failed(control) > 0
-        report_array.push "#{node['name']},#{profile['name']},#{profile['title']},#{profile['version']},#{profile['summary']},#{control['id']},#{control['title']},#{control['impact']},#{num_failed(control)}"
+  if report['profiles']
+    report['profiles'].each do |profile|
+      if profile['controls']
+        profile['controls'].each do |control|
+          if num_failed(control) > 0
+            report_array.push "#{node['name']},#{profile['name']},#{profile['title']},#{profile['version']},#{profile['summary']},#{control['id']},#{control['title']},#{control['impact']},#{num_failed(control)}"
+          end
+        end
       end
     end
   end
