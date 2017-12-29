@@ -4,7 +4,7 @@ require "uri"
 require "json"
 
 def get_nodes(role, automate_url, enterprise, token, user)
-  uri = URI.parse("https://#{automate_url}/compliance/nodes?filters=environment:#{role}")
+  uri = URI.parse("https://#{automate_url}/compliance/nodes?filters=role:#{role}")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
