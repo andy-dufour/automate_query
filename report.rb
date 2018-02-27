@@ -4,7 +4,7 @@ require "uri"
 require "json"
 
 def get_nodes(role, automate_url, enterprise, token, user)
-  uri = URI.parse("https://#{automate_url}/compliance/nodes?filters=role:#{role}")
+  uri = URI.parse("https://#{automate_url}/compliance/nodes?filters=role:#{role}&per_page=1000")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -52,7 +52,9 @@ end
 
 
 
-report_array = ['Node Name,Profile Name,Profile Title,Profile Version,Profile Summary,Control ID,Control Title,Control Impact,Number of Failed Results']
+# report_array = ['Node Name,Profile Name,Profile Title,Profile Version,Profile Summary,Control ID,Control Title,Control Impact,Number of Failed Results']
+report_array = ['Node Name,Profile Name,Profile Title,Profile Version,Profile Summary,Control ID,Control Title,Control Impact,Status']
+
 
 automate_fqdn = ARGV[0]
 ent = ARGV[1]
@@ -69,7 +71,9 @@ nodes.each do |node|
       if profile['controls']
         profile['controls'].each do |control|
           if num_failed(control) > 0
-            report_array.push "#{node['name']},#{profile['name']},#{profile['title']},#{profile['version']},#{profile['summary']},#{control['id']},#{control['title']},#{control['impact']},#{num_failed(control)}"
+            control['status'] = 'failed'
+            # report_array.push "#{node['name']},#{profile['name']},#{profile['title']},#{profile['version']},#{profile['summary']},#{control['id']},#{control['title']},#{control['impact']},#{num_failed(control)},#{control['results']}"
+            report_array.push "#{node['name']},#{profile['name']},#{profile['title']},#{profile['version']},#{profile['summary']},#{control['id']},#{control['title']},#{control['impact']},#{control['status']}"
           end
         end
       end
